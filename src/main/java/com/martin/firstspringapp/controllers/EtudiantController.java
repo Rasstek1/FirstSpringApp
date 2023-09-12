@@ -21,11 +21,11 @@ public class EtudiantController {
     public String supprimer(HttpServletRequest request){
         int numero=Integer.parseInt(request.getParameter("numero"));
         dc.supprimer(numero);
-        return return "redirect: /etudiant/liste ";
+        return "redirect:/etudiant/liste ";
 
     }
     @RequestMapping(value="/etudiant/modifier", method = RequestMethod.GET)
-    public ModelAndView modifier(HttpServletRequest request){
+    public ModelAndView edit(HttpServletRequest request){
         //récupérer le numéro de l'élément à modifier
         int numero=Integer.parseInt(request.getParameter("numero"));
         // rechercher l'lément à modifier
