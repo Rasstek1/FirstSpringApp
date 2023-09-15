@@ -1,6 +1,7 @@
 package com.martin.firstspringapp.models;
 import java.util.ArrayList;
 import java.util.List;
+
 public class EtudiantDataContext {
     public static List<Etudiant> liste= new ArrayList(){
         {
@@ -13,7 +14,7 @@ public class EtudiantDataContext {
     public void supprimer(int numero){
         EtudiantDataContext.liste.removeIf((e)->e.getNumero()==numero);
     }
-    public void modifier(Etudiant etud,int ancienNum){
+    public void modifier(Etudiant etud, int ancienNum){
         // rechercher l'ancien étudiant
         Etudiant ancEtud=EtudiantDataContext.liste.stream().filter(e->e.getNumero()==ancienNum).findFirst().orElse(null);
         // remplacer l'ancien par le nouveau
@@ -22,5 +23,4 @@ public class EtudiantDataContext {
         ancEtud.setPrenom(etud.getPrenom());
         ancEtud.setSexe(etud.getSexe());
     }
-
 }

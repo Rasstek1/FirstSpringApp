@@ -14,7 +14,7 @@
 <body>
 <c:url var="urlModifier" value="/etudiant/modifier"/>
 <table class="table table-striped">
-    <form method="post" action="${urlModifier}">
+    <form method="post" action="${urlModifier}" name="formModifier">
         <tr>
             <td>Numéro :</td>
             <td><input class="form-control" type="text" name="numero" value="${etudiant.numero}" readonly/></td>

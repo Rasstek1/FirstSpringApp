@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class EtudiantController {
-
     private EtudiantDataContext dc= new EtudiantDataContext();
     public EtudiantController(){}
     @RequestMapping("/etudiant/liste")
@@ -17,37 +16,38 @@ public class EtudiantController {
         return new ModelAndView("liste", "etudiants",EtudiantDataContext.liste );
     }
 
-    @RequestMapping(value="/etudiant/supprimer", method = RequestMethod.GET)
+    /*@RequestMapping(value="/etudiant/supprimer", method = RequestMethod.GET)
     public String supprimer(HttpServletRequest request){
         int numero=Integer.parseInt(request.getParameter("numero"));
         dc.supprimer(numero);
-        return "redirect:/etudiant/liste ";
+        return "redirect:/etudiant/liste";
 
+    }*/
+
+//Cette methode est la meme que celle au dessus mais on a utilisé requestParam et on retire pas tout le request pour trouver le numero
+    //cest une suppression faite dans l'url
+    //Avec RequestParam on recupere le numero dans lurl
+    @RequestMapping(value = "/etudiant/supprimer", method = RequestMethod.GET)
+    public String supprimer(@RequestParam("num") int numero) {//requestParam num parceque dans le html on a mis num
+        dc.supprimer(numero);
+        return "redirect:/etudiant/liste"; // Redirige vers la liste des étudiants après la suppression
     }
-    @RequestMapping(value="/etudiant/modifier", method = RequestMethod.GET)
-    public ModelAndView edit(HttpServletRequest request){
-        //récupérer le numéro de l'élément à modifier
-        int numero=Integer.parseInt(request.getParameter("numero"));
+
+//Avec PathVariable on recupere le numero dans lurl
+    @RequestMapping(value="/etudiant/modifier/{numero}", method = RequestMethod.GET)//{numero} est le parametre de la methode a mettre au bout de ladresse dans lurl
+    public ModelAndView modifier(@PathVariable (name= "numero")int numero){//pathvariable pour recuperer le numero dans lurl
         // rechercher l'lément à modifier
         Etudiant etud=EtudiantDataContext.liste.stream().
                 filter(e->e.getNumero()==numero).findFirst().orElse(null);
         //envoyer l'étudiant à la vue modifier
         return new ModelAndView("modifier", "etudiant",etud );
     }
-
+//Avec ModelAttribute on recupere les données du formulaire
     @RequestMapping(value="/etudiant/modifier", method = RequestMethod.POST)
-    public String modifier(HttpServletRequest request){
-        int numero=Integer.parseInt(request.getParameter("numero"));
-        //construire un nouveau étudiant
-        Etudiant etud= new Etudiant();
-        etud.setNumero(Integer.parseInt(request.getParameter("numero")));
-        etud.setNom(request.getParameter("nom"));
-        etud.setPrenom(request.getParameter("prenom"));
-        etud.setSexe(request.getParameter("sexe").charAt(0));
-        // modifier l'ancien étudiant
-        dc.modifier(etud,numero);
+    public String modifierPost(@ModelAttribute(name="formModifier" )Etudiant etud){
+        // modifier l' étudiant par son numero
+        dc.modifier(etud,etud.getNumero());
         return "redirect:/etudiant/liste";
+
     }
 }
-
-
